@@ -4,10 +4,10 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version>1.0.5</Version>
-    <PackageLicenseUrl>https://github.com/DiamondDragon/StoryLine/blob/master/License.txt</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/DiamondDragon/StoryLine.Rest/blob/master/License.txt</PackageLicenseUrl>
     <Copyright>Andrei Salanoi &lt;diamond_dragon@tut.by&gt;</Copyright>
-    <PackageProjectUrl>https://github.com/DiamondDragon/StoryLine</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/DiamondDragon/StoryLine</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/DiamondDragon/StoryLine.Rest</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DiamondDragon/StoryLine.Rest</RepositoryUrl>
     <PackageTags>test testing tdd framework fluent assert core .netcore netcore microservice</PackageTags>
     <Description>Library contains set of actions and assertions used to create System tests and Component tests for microservices.</Description> 
   </PropertyGroup>
