@@ -96,8 +96,10 @@ namespace StoryLine.Rest.Services.Resources
             {
                 var possibleResourceName = frame.TypeName + "." + resourceName + suffix;
 
-                if (resources.Any(x => x.StartsWith(possibleResourceName, StringComparison.OrdinalIgnoreCase)))
-                    return assembly.GetManifestResourceStream(possibleResourceName);
+                var matchingResource = resources.FirstOrDefault(x => x.StartsWith(possibleResourceName, StringComparison.OrdinalIgnoreCase));
+
+                if (!string.IsNullOrEmpty(matchingResource))
+                    return assembly.GetManifestResourceStream(matchingResource);
             }
 
             return Stream.Null;
@@ -105,10 +107,8 @@ namespace StoryLine.Rest.Services.Resources
 
         private static Stream GetExactMatchResource(StackFrame frame, Assembly assembly, string resourceName, IEnumerable<string> resources)
         {
-            var possibleResourceName = frame.TypeName + "." + resourceName;
-
-            return resources.Contains(possibleResourceName) ? 
-                assembly.GetManifestResourceStream(possibleResourceName) : 
+            return resources.Contains(resourceName) ? 
+                assembly.GetManifestResourceStream(resourceName) : 
                 Stream.Null;
         }
     }
