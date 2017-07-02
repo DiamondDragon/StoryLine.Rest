@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using StoryLine.Contracts;
 using StoryLine.Rest.Expectations.Builders;
 using StoryLine.Rest.Expectations.Services;
@@ -62,6 +63,11 @@ namespace StoryLine.Rest.Expectations
             _method = value;
 
             return this;
+        }
+
+        public HttpResponse Status(HttpStatusCode status)
+        {
+            return Status((int) status);
         }
 
         public HttpResponse Status(int status)
