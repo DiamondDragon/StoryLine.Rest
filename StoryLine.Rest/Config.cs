@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -9,6 +10,8 @@ using StoryLine.Rest.Expectations.Services.Text;
 using StoryLine.Rest.Services;
 using StoryLine.Rest.Services.Http;
 using StoryLine.Rest.Services.Resources;
+
+[assembly: InternalsVisibleTo("StoryLine.Rest.Tests")]
 
 namespace StoryLine.Rest
 {

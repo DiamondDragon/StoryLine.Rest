@@ -10,6 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Services\Resources\ResourceContentProviderTests.GetAsString_When_No_Name_Specified_Should_Return_Content_Matching_Test_Case_Name.approved.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Services\Resources\ResourceContentProviderTests.Test.json" />
+    <EmbeddedResource Include="Services\Resources\ResourceContentProviderTests.Exact.json" />
+    <EmbeddedResource Include="Services\Resources\ResourceContentProviderTests.GetAsString_When_No_Name_Specified_Should_Return_Content_Matching_Test_Case_Name.approved.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="3.4.1" />
     <PackageReference Include="FluentAssertions" Version="4.19.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
