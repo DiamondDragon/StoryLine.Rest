@@ -69,7 +69,7 @@ namespace StoryLine.Rest.Expectations.Builders
             return _builder;
         }
 
-        public HttpResponse Containing(string value, bool ignoreCase = true)
+        public HttpResponse Contains(string value, bool ignoreCase = true)
         {
             if (string.IsNullOrEmpty(value))
                 throw new ArgumentException("Value cannot be null or empty.", nameof(value));
@@ -79,6 +79,32 @@ namespace StoryLine.Rest.Expectations.Builders
             _builder.RequestExpectation(new ResponseTextBodyExpectation(
                 x => (ignoreCase ? x.ToLower() : x).Contains(lowerCasePattern),
                 x => $"Expected value must contain \"{value}\", but actual value was \"{x}\"."
+            ));
+
+            return _builder;
+        }
+
+        public HttpResponse Meets(Action<string> validator)
+        {
+            if (validator == null)
+                throw new ArgumentNullException(nameof(validator));
+
+            _builder.RequestExpectation(new ResponseTextBodyExpectation(
+                x => { validator(x); return true; },
+                x => $"Value \"{x}\", doesn't meet expectation."
+            ));
+
+            return _builder;
+        }
+
+        public HttpResponse Meets(Func<string, bool> validator)
+        {
+            if (validator == null)
+                throw new ArgumentNullException(nameof(validator));
+
+            _builder.RequestExpectation(new ResponseTextBodyExpectation(
+                validator,
+                x => $"Value \"{x}\", doesn't meet expectation."
             ));
 
             return _builder;
