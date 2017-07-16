@@ -67,7 +67,7 @@ namespace Microservice.Membership.Services
 
             var users =
                 (from user in _users
-                 orderby user.FirstName, user.LastName
+                 orderby user.UpdatedOn descending 
                  select user)
                 .Skip(skip)
                 .Take(take)

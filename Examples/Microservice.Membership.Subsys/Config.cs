@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using Microservice.Membership.Subsys;
+﻿using System.Reflection;
 using Microservice.Membership.Subsys.v1.Models;
 using Microsoft.Extensions.Configuration;
+using Xunit;
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace Microservice.Membership.Subsys
 {
