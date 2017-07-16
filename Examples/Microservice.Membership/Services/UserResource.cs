@@ -19,8 +19,9 @@ namespace Microservice.Membership.Services
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-            user.CreatedOn = DateTime.UtcNow;;
-            user.UpdatedOn = DateTime.UtcNow;;
+            user.Id = Guid.NewGuid();
+            user.CreatedOn = DateTime.UtcNow;
+            user.UpdatedOn = DateTime.UtcNow;
 
             _users = _users.Add(user);
 

@@ -35,9 +35,6 @@ namespace Microservice.Membership.Subsys.v1.Actions
                     .Expects<HttpResponse>(x => x
                         .Status(201))
                .Run();
-
-
-            var result = actor.Artifacts.Get<IResponse>().GetText();
         }
     }
 }
