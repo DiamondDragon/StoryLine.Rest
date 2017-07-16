@@ -38,7 +38,7 @@ namespace Microservice.Membership.Subsys.v1.Resources.User
         }
 
         [Fact]
-        public void When_Existing_User_Requested_Should_Return_200_And_Update_Fields()
+        public void When_User_Exists_Should_Return_200_And_Update_Fields()
         {
             Scenario.New()
                 .Given()
