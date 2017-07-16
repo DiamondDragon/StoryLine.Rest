@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="v1\Resources\User\Post.When_Existing_User_Requested_Should_Return_201_Location_Header_And_Expected_Body.json" />
     <EmbeddedResource Include="v1\Resources\User\Get.When_Existing_User_Requested_Should_Return_200_And_Body_Should_Match_Resource_File.json" />
   </ItemGroup>
 

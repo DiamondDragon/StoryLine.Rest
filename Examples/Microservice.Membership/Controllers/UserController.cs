@@ -62,15 +62,15 @@ namespace Microservice.Membership.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromBody]User user)
+        public IActionResult Update(Guid id, [FromBody]User user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-            if (!_userResource.Exists(user.Id))
+            if (!_userResource.Exists(id))
                 return NotFound();
 
-            return Ok(_userResource.Update(user));
+            return Ok(_userResource.Update(id, user));
         }
 
         [HttpDelete("{id}")]

@@ -5,8 +5,6 @@ using StoryLine.Contracts;
 using StoryLine.Rest.Actions;
 using StoryLine.Rest.Actions.Extensions;
 using StoryLine.Rest.Expectations;
-using StoryLine.Rest.Extensions;
-using StoryLine.Rest.Services.Http;
 
 namespace Microservice.Membership.Subsys.v1.Actions
 {

@@ -19,6 +19,7 @@ namespace Microservice.Membership.Subsys.v1.Resources.User
             Scenario.New()
                 .When()
                 .Performs<HttpRequest>(x => x
+                    .Method("DELETE")
                     .Url("/v1/users/" + Guid.NewGuid()))
                 .Then()
                     .Expects<HttpResponse>(x => x

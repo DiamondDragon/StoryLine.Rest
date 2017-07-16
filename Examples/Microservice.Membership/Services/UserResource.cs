@@ -28,14 +28,14 @@ namespace Microservice.Membership.Services
             return user;
         }
 
-        public User Update(User user)
+        public User Update(Guid id, User user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-            var existingUser = _users.FirstOrDefault(x => x.Id == user.Id);
+            var existingUser = _users.FirstOrDefault(x => x.Id == id);
             if (existingUser == null)
-                throw new ArgumentException("Requested user was not found. UserId = " + user.Id);
+                throw new ArgumentException("Requested user was not found. UserId = " + id);
 
             existingUser.FirstName = user.FirstName;
             existingUser.LastName = user.LastName;
