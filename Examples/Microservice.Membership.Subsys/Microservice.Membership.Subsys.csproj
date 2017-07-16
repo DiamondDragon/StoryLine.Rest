@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="v1\Resources\User\Get.When_Existing_User_Requested_Should_Return_200_And_Body_Should_Match_Resource_File.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="v1\Resources\User\Get.When_Existing_User_Requested_Should_Return_200_And_Body_Should_Match_Resource_File.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GenFu" Version="1.3.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.2" />
+    <PackageReference Include="FluentAssertions" Version="4.19.3" />
+
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+
+    <PackageReference Include="StoryLine" Version="1.6.1" />
+    <PackageReference Include="StoryLine.Rest" Version="1.4.0" />
+    <PackageReference Include="StoryLine.Utils" Version="1.2.1" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
