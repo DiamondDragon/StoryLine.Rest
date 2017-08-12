@@ -14,7 +14,6 @@ namespace StoryLine.Rest.Actions
         private readonly Dictionary<string, List<string>> _headers = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, List<string>> _queryParameters = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         private string _method = "GET";
-        private string _path;
         private string _url;
         private string _service;
         private byte[] _body;
@@ -44,23 +43,7 @@ namespace StoryLine.Rest.Actions
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(value));
 
-            if (!string.IsNullOrEmpty(_path))
-                throw new InvalidOperationException($"Method {nameof(Url)}() can't be used if {nameof(Path)}() was already executed.");
-
             _url = value;
-
-            return this;
-        }
-
-        public IHttpRequest Path(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(value));
-
-            if (!string.IsNullOrEmpty(_path))
-                throw new InvalidOperationException($"Method {nameof(Path)}() can't be used if {nameof(Url)}() was already executed.");
-
-            _path = value;
 
             return this;
         }
@@ -110,33 +93,31 @@ namespace StoryLine.Rest.Actions
 
         private string BuildUrl()
         {
-            if (string.IsNullOrEmpty(_path))
-                return _url ?? DefaultUrl;
+            if (_queryParameters.Count == 0)
+                return _url;
 
-            var builder = new StringBuilder();
+            var queryParametersBuilder = new StringBuilder();
 
             foreach (var header in _queryParameters)
             {
                 foreach (var value in header.Value)
                 {
-                    if (builder.Length > 0)
-                        builder.Append('&');
+                    if (queryParametersBuilder.Length > 0)
+                        queryParametersBuilder.Append('&');
 
-                    builder.Append(WebUtility.UrlEncode(header.Key));
-                    builder.Append('=');
-                    builder.Append(WebUtility.UrlEncode(value));
+                    queryParametersBuilder.Append(WebUtility.UrlEncode(header.Key));
+                    queryParametersBuilder.Append('=');
+                    queryParametersBuilder.Append(WebUtility.UrlEncode(value));
                 }
             }
 
-            if (builder.Length > 0)
-                builder.Insert(0, '?');
+            if ((_url ?? string.Empty).Contains("?"))
+                return _url + "&" + queryParametersBuilder;
 
-            builder.Insert(0, _path ?? DefaultUrl);
-
-            return builder.ToString();
+            return _url + "?" + queryParametersBuilder;
         }
 
-        private static void AddDictionaryValue(Dictionary<string, List<string>> headers, string header, string value)
+        private static void AddDictionaryValue(IDictionary<string, List<string>> headers, string header, string value)
         {
             if (!headers.ContainsKey(header))
                 headers.Add(header, new List<string>());
