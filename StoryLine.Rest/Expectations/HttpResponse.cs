@@ -165,22 +165,9 @@ namespace StoryLine.Rest.Expectations
 
             return RequestExpectation(new ResponseHeaderExpectation(
                 header,
-                x => Validate(x, validator),
+                x => { validator(x); return true; },
                 errorMessageBuilder
             ));
-        }
-
-        private static bool Validate(string value, Action<string> validator)
-        {
-            try
-            {
-                validator(value);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
         }
 
         public HttpResponse HeaderMatchesRegex(string header, string value)

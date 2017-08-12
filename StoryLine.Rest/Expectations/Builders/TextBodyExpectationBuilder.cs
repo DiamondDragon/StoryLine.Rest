@@ -13,11 +13,6 @@ namespace StoryLine.Rest.Expectations.Builders
             _builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
-        public TextResourceBodyExpectationBuilder EqualsTo()
-        {
-            return new TextResourceBodyExpectationBuilder(_builder);
-        }
-
         public HttpResponse EqualsTo(string value)
         {
             return EqualsTo(value, StringComparison.OrdinalIgnoreCase);
@@ -30,84 +25,85 @@ namespace StoryLine.Rest.Expectations.Builders
 
             _builder.RequestExpectation(new ResponseTextBodyExpectation(
                 x => x.Equals(value, comparison),
-                x => $"Expected value must be equal to \"{value}\", but actual value was \"{x}\"."
+                x => $"Text body must be equal to \"{value}\", but actual value was \"{x}\"."
             ));
 
             return _builder;
         }
 
-        public HttpResponse Matches(string value, RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Singleline)
+        public HttpResponse MatchesRegex(string value)
+        {
+            return MatchesRegex(value, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        }
+
+        public HttpResponse MatchesRegex(string value, RegexOptions options)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
             _builder.RequestExpectation(new ResponseTextBodyExpectation(
                 x => Regex.IsMatch(x, value, options),
-                x => $"Expected value must match regual expression \"{value}\", but actual value was \"{x}\"."
+                x => $"Text body must match regual expression \"{value}\", but actual value was \"{x}\"."
             ));
 
             return _builder;
         }
 
-        public HttpResponse StartsWith(string value)
+        public HttpResponse Matches(Action<string> validator)
         {
-            return StartsWith(value, StringComparison.OrdinalIgnoreCase);
+            return Matches(validator, "Text body doesn't pass validation check.");
         }
 
-        public HttpResponse StartsWith(string value, StringComparison comparison)
+        public HttpResponse Matches(Action<string> validator, string errorMessage)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            if (string.IsNullOrWhiteSpace(errorMessage))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(errorMessage));
 
-            var lowerCasePattern = value.ToLower();
-
-            _builder.RequestExpectation(new ResponseTextBodyExpectation(
-                x => x.StartsWith(lowerCasePattern, comparison),
-                x => $"Expected value must start \"{value}\", but actual value was \"{x}\"."
-            ));
-
-            return _builder;
+            return Matches(validator, x => errorMessage);
         }
 
-        public HttpResponse Contains(string value, bool ignoreCase = true)
-        {
-            if (string.IsNullOrEmpty(value))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(value));
-
-            var lowerCasePattern = ignoreCase ? value.ToLower() : value;
-
-            _builder.RequestExpectation(new ResponseTextBodyExpectation(
-                x => (ignoreCase ? x.ToLower() : x).Contains(lowerCasePattern),
-                x => $"Expected value must contain \"{value}\", but actual value was \"{x}\"."
-            ));
-
-            return _builder;
-        }
-
-        public HttpResponse Meets(Action<string> validator)
+        public HttpResponse Matches(Action<string> validator, Func<string, string> errorMessageBuilder)
         {
             if (validator == null)
                 throw new ArgumentNullException(nameof(validator));
+            if (errorMessageBuilder == null)
+                throw new ArgumentNullException(nameof(errorMessageBuilder));
 
             _builder.RequestExpectation(new ResponseTextBodyExpectation(
                 x => { validator(x); return true; },
-                x => $"Value \"{x}\", doesn't meet expectation."
+                errorMessageBuilder
             ));
 
             return _builder;
         }
 
-        public HttpResponse Meets(Func<string, bool> validator)
+        public HttpResponse Matches(Func<string, bool> predicate)
         {
-            if (validator == null)
-                throw new ArgumentNullException(nameof(validator));
+            return Matches(predicate, "Text body doesn't match predicate.");
+        }
+
+        public HttpResponse Matches(Func<string, bool> predicate, string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(errorMessage))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(errorMessage));
+
+            return Matches(predicate, x => errorMessage);
+        }
+
+        public HttpResponse Matches(Func<string, bool> predicate, Func<string, string> errorMessageBuilder)
+        {
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+            if (errorMessageBuilder == null)
+                throw new ArgumentNullException(nameof(errorMessageBuilder));
 
             _builder.RequestExpectation(new ResponseTextBodyExpectation(
-                validator,
-                x => $"Value \"{x}\", doesn't meet expectation."
+               predicate,
+                errorMessageBuilder
             ));
 
             return _builder;
         }
+
     }
 }
