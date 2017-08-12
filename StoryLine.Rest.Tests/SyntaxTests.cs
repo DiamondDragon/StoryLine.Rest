@@ -21,8 +21,7 @@ namespace StoryLine.Rest.Tests
                         .Service("CRM")
                         .JsonBody()
                             .Matches("xxx")
-                        .Header("ssss")
-                            .Contains("sss"))
+                        .Header("ssss", p => p.Contains("xxx")))
                 .Run();
         }
     }
