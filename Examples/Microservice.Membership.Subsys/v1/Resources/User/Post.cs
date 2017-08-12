@@ -35,8 +35,7 @@ namespace Microservice.Membership.Subsys.v1.Resources.User
                 .Then()
                     .Expects<HttpResponse, Models.User>((x, user) => x
                         .Status(201)
-                        .Header("Location")
-                            .Contains("v1/users/" + user.Id)
+                        .Header("Location", p => p.Contains("v1/users/" + user.Id))
                         .JsonBody()
                             .Matches()
                                 .ResourceFile(new[] { "$.id", "$.createdOn", "$.updatedOn" }))
