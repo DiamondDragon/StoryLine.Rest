@@ -12,7 +12,27 @@ namespace StoryLine.Rest.Expectations.Builders
             _response = response ?? throw new ArgumentNullException(nameof(response));
         }
 
-        public HttpResponse Matches(string pattern, RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Singleline)
+        public HttpResponse EqualsTo(string pattern)
+        {
+            return EqualsTo(pattern, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public HttpResponse EqualsTo(string pattern, StringComparison comparison)
+        {
+            if (pattern == null)
+                throw new ArgumentNullException(nameof(pattern));
+
+            _response.Url(x => x.Equals(pattern, comparison));
+
+            return _response;
+        }
+
+        public HttpResponse MatchesRegex(string pattern)
+        {
+            return MatchesRegex(pattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        }
+
+        public HttpResponse MatchesRegex(string pattern, RegexOptions options)
         {
             if (pattern == null)
                 throw new ArgumentNullException(nameof(pattern));
@@ -22,30 +42,12 @@ namespace StoryLine.Rest.Expectations.Builders
             return _response;
         }
 
-        public HttpResponse EqualsTo(string pattern)
+        public HttpResponse Matches(Func<string, bool> predicate)
         {
-            pattern = pattern?.ToLower() ?? throw new ArgumentNullException(nameof(pattern));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
 
-            _response.Url(x => x.Equals(pattern, StringComparison.OrdinalIgnoreCase));
-
-            return _response;
-        }
-
-        public HttpResponse StartingWith(string pattern)
-        {
-            if (pattern == null)
-                throw new ArgumentNullException(nameof(pattern));
-
-            _response.Url(x => x.StartsWith(pattern, StringComparison.OrdinalIgnoreCase));
-
-            return _response;
-        }
-
-        public HttpResponse Contains(string pattern)
-        {
-            pattern = pattern?.ToLower() ?? throw new ArgumentNullException(nameof(pattern));
-
-            _response.Url(x => x.ToLower().Contains(pattern));
+            _response.Url(predicate);
 
             return _response;
         }

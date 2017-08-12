@@ -65,7 +65,7 @@ namespace StoryLine.Rest.Actions
             return this;
         }
 
-        public IHttpRequest QueryParameter(string parameter, string value)
+        public IHttpRequest QueryParam(string parameter, string value)
         {
             if (string.IsNullOrWhiteSpace(parameter))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(parameter));

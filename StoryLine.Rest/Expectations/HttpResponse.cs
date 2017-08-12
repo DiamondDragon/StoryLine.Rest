@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.RegularExpressions;
 using StoryLine.Contracts;
 using StoryLine.Rest.Expectations.Builders;
 using StoryLine.Rest.Expectations.Services;
@@ -94,18 +95,96 @@ namespace StoryLine.Rest.Expectations
 
         public HttpResponse Header(string header, string value)
         {
-            if (string.IsNullOrWhiteSpace(header))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(header));
-
-            return Header(header).EqualsTo(value);
+            return Header(header, value, StringComparison.OrdinalIgnoreCase);
         }
 
-        public HeaderExpectationBuilder Header(string header)
+        public HttpResponse Header(string header, string value, StringComparison comparison)
         {
             if (string.IsNullOrWhiteSpace(header))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(header));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
 
-            return new HeaderExpectationBuilder(header, this);
+            return RequestExpectation(new ResponseHeaderExpectation(
+                header,
+                x => x.Equals(value, comparison),
+                x => $"Expected value for header \"{header}\" must be equal to \"{value}\", actual value was \"{x}\"."
+            ));
+        }
+
+        public HttpResponse Header(string header, Func<string, bool> predicate)
+        {
+            return Header(header, predicate, $"Header \"{header}\" doesn't match predicate.");
+        }
+
+        public HttpResponse Header(string header, Func<string, bool> predicate, string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(errorMessage))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(errorMessage));
+
+            return Header(header, predicate, x => errorMessage);
+        }
+
+        public HttpResponse Header(string header, Func<string, bool> predicate, Func<string, string> errorMessageBuilder)
+        {
+            if (string.IsNullOrWhiteSpace(header))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(header));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+            if (errorMessageBuilder == null)
+                throw new ArgumentNullException(nameof(errorMessageBuilder));
+
+            return RequestExpectation(new ResponseHeaderExpectation(
+                header,
+                predicate,
+                errorMessageBuilder
+            ));
+        }
+
+        public HttpResponse Header(string header, Action<string> validator)
+        {
+            return Header(header, validator, $"Header \"{header}\" doesn't pass validation check.");
+        }
+
+        public HttpResponse Header(string header, Action<string> validator, string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(errorMessage))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(errorMessage));
+
+            return Header(header, validator, x => errorMessage);
+        }
+
+        public HttpResponse Header(string header, Action<string> validator, Func<string, string> errorMessageBuilder)
+        {
+            if (string.IsNullOrWhiteSpace(header))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(header));
+            if (validator == null)
+                throw new ArgumentNullException(nameof(validator));
+            if (errorMessageBuilder == null)
+                throw new ArgumentNullException(nameof(errorMessageBuilder));
+
+            return RequestExpectation(new ResponseHeaderExpectation(
+                header,
+                x => { validator(x); return true; },
+                errorMessageBuilder
+            ));
+        }
+
+        public HttpResponse HeaderMatchesRegex(string header, string value)
+        {
+            return HeaderMatchesRegex(header, value, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        }
+
+        public HttpResponse HeaderMatchesRegex(string header, string value, RegexOptions options)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            return RequestExpectation(new ResponseHeaderExpectation(
+                header,
+                x => Regex.IsMatch(x, value, options),
+                x => $"Expected value for header \"{header}\" must match regual expression \"{value}\", actual value was \"{x}\"."
+            ));
         }
 
         public HttpResponse RequestExpectation(IResponseExpectation expectation)

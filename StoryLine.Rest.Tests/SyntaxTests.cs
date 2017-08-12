@@ -19,10 +19,11 @@ namespace StoryLine.Rest.Tests
                     .Expects<HttpResponse>(x => x
                         .Url(p => p.StartsWith("ss"))
                         .Service("CRM")
+                        .TextBody()
+                            .Matches(p => p.Contains("xxx"))
                         .JsonBody()
                             .Matches("xxx")
-                        .Header("ssss")
-                            .Contains("sss"))
+                        .Header("ssss", p => p.Contains("xxx")))
                 .Run();
         }
     }
