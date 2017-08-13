@@ -15,19 +15,23 @@ namespace StoryLine.Rest.Tests
                 .When()
                     .Performs<HttpRequest>(x => x
                         .Method("POST")
-                        .Url("/aaaaa?xxx=a")
+                        .Url("http://localhost:7000/aaaaa?xxx=a")
                         .QueryParam("a", "b")
                         .QueryParam("c", "d")
-                        .JsonObjectBody(new { a = "a" }))
-                .Then()
-                    .Expects<HttpResponse>(x => x
-                        .Url(p => p.StartsWith("ss"))
-                        .Service("CRM")
-                        .TextBody()
-                            .Matches(p => p.Contains("xxx"))
-                        .JsonBody()
-                            .Matches("xxx")
-                        .Header("ssss", p => p.Contains("xxx")))
+                        //.JsonObjectBody(new { a = "a" })
+                        .FormUrlEncodedBody(p => p
+                            .Param("xxx", "xxx")
+                            .Param("xxxx", "xxx"))
+                        )
+                //.Then()
+                //    .Expects<HttpResponse>(x => x
+                //        .Url(p => p.StartsWith("ss"))
+                //        .Service("CRM")
+                //        .TextBody()
+                //            .Matches(p => p.Contains("xxx"))
+                //        .JsonBody()
+                //            .Matches("xxx")
+                //        .Header("ssss", p => p.Contains("xxx")))
                 .Run();
         }
     }
