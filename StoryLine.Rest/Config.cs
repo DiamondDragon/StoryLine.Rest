@@ -10,6 +10,7 @@ using StoryLine.Rest.Expectations.Services.Text;
 using StoryLine.Rest.Services;
 using StoryLine.Rest.Services.Http;
 using StoryLine.Rest.Services.Resources;
+using StoryLine.Rest.Services.Http.Decorators;
 
 [assembly: InternalsVisibleTo("StoryLine.Rest.Tests")]
 
@@ -17,9 +18,11 @@ namespace StoryLine.Rest
 {
     public static class Config
     {
+        private static readonly CompositeResponseLogger ResponseLogger = new CompositeResponseLogger();
+
         private static IResponseToTextConverter _responseToTextConverter = new ResponseToTextConverter(
             new ContentTypeProvider());
-        private static readonly ServiceRegistry RerviceRegistry = new ServiceRegistry();
+        internal static readonly ServiceRegistry ServiceRegistry = new ServiceRegistry();
         private static readonly AssemblyProvider AssemblyProvider = new AssemblyProvider();
 
         private static readonly IStackTraceProvider StackTraceProvider = new StackTraceProvider();
@@ -28,12 +31,15 @@ namespace StoryLine.Rest
             AssemblyProvider,
             StackTraceProvider,
             new MethodDetailsFilter(AssemblyProvider));
- private static IRestClient _restClient = new RestClient(
+
+        private static readonly IRestClient RestClientInstance = new RestClient(
             new HttpClientFactory(
-                RerviceRegistry),
+                ServiceRegistry),
             new RequestMessageFactory(),
             new ResponseFactory()
         );
+        private static readonly ResponseAugmentingDecorator ResponseAugmentingDecorator = new ResponseAugmentingDecorator(RestClientInstance);
+        private static readonly ResponseRecordingDecorator ResponseRecordingDecorator = new ResponseRecordingDecorator(ResponseAugmentingDecorator, ResponseLogger, () => ResponseRecordingEnabled);
 
         private static Func<JsonVerifierSettings, ITextVerifier> _jsonVerifierFactory = x => new JsonVerifier(x);
         private static Func<PlainTextVerifierSettings, ITextVerifier> _plainTextVerifierFactory = x => new PlainTextVerifier(x);
@@ -95,15 +101,29 @@ namespace StoryLine.Rest
             set => _defaultTestCaseAttributes = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public static IRestClient RestClient
-        {
-            get => _restClient;
-            set => _restClient = value ?? throw new ArgumentNullException(nameof(value));
-        }
+        internal static IRestClient RestClient => ResponseRecordingDecorator;
+
+        public static bool ResponseRecordingEnabled { get; set; } = false;
 
         public static void SetAssemblies(params Assembly[] assemblies)
         {
             AssemblyProvider.Assemblies = assemblies ?? throw new ArgumentNullException(nameof(assemblies));
+        }
+
+        public static void AddResponseLogger(IResponseLogger logger)
+        {
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+
+            ResponseLogger.Add(logger);
+        }
+
+        public static void AddResponseAugmenter(IResponseAugmenter augmenter)
+        {
+            if (augmenter == null)
+                throw new ArgumentNullException(nameof(augmenter));
+
+            ResponseAugmentingDecorator.AddResponseAugmenter(augmenter);
         }
 
         public static void AddServiceEndpont(string service, string baseUrl)
@@ -123,7 +143,7 @@ namespace StoryLine.Rest
             if (string.IsNullOrWhiteSpace(baseUrl))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(baseUrl));
 
-            RerviceRegistry.Add(new ServiceConfig(service, baseUrl, timeout, allowRedirect));
+            ServiceRegistry.Add(new ServiceConfig(service, baseUrl, timeout, allowRedirect));
         }
     }
 }

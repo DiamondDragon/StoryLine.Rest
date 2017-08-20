@@ -9,5 +9,7 @@ namespace StoryLine.Rest.Services.Http
         string Url { get; set; }
         IReadOnlyDictionary<string, string[]> Headers { get; }
         byte[] Body { get; set; }
+
+        IDictionary<string, object> Properties { get; set; }
     }
 }

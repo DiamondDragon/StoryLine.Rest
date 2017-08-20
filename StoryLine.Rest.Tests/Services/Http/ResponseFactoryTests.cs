@@ -66,7 +66,7 @@ namespace StoryLine.Rest.Tests.Services.Http
             {
                 ReasonPhrase = "Reason1",
                 StatusCode = (HttpStatusCode)213,
-                Content = new ByteArrayContent(new byte[] { 123 }),
+                Content = new ByteArrayContent(new byte[] { 123 })
             };
 
             message.Headers.Add("custom-message-header", new[] { "value1"});

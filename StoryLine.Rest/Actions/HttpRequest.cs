@@ -4,13 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using StoryLine.Contracts;
+using StoryLine.Exceptions;
 
 namespace StoryLine.Rest.Actions
 {
     public class HttpRequest : IHttpRequest
     {
-        private static readonly string DefaultUrl = string.Empty;
-
         private readonly Dictionary<string, List<string>> _headers = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, List<string>> _queryParameters = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         private string _method = "GET";
@@ -83,12 +82,31 @@ namespace StoryLine.Rest.Actions
         {
             return new HttpRequestAction
             {
-                Service = _service,
+                Service = GetService(),
                 Body = _body,
                 Headers = _headers.ToDictionary(x => x.Key, x => x.Value.ToArray(), StringComparer.OrdinalIgnoreCase),
                 Method = _method,
                 Url = BuildUrl()
             };
+        }
+
+        private string GetService()
+        {
+            if (!string.IsNullOrEmpty(_service))
+            {
+                var config = Config.ServiceRegistry.Get(_service);
+                if (config == null)
+                    throw new ExpectationException($"Configuration for service \"{_service}\" was not found.");
+
+                return _service;
+            }
+
+            var allConfigs = Config.ServiceRegistry.GetAll();
+
+            // If there only one service is registered it's clear that all services cases
+            // are expected to use the endpoint by defalt. These lines eliminate a need
+            // to specify the same service name for each HttpRequest.
+            return allConfigs.Count == 1 ? allConfigs.First().Service : null;
         }
 
         private string BuildUrl()

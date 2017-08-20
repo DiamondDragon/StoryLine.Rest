@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace StoryLine.Rest.Services.Http
 {
     public class RestClient : IRestClient
     {
+        public static readonly string ExecutionTimeKey = nameof(RestClient) + ".ExecutionTimeMs";
+
         private readonly IHttpClientFactory _clientFactory;
         private readonly IRequestMessageFactory _requestMessageFactory;
         private readonly IResponseFactory _responseFactory;
@@ -27,16 +30,28 @@ namespace StoryLine.Rest.Services.Http
             {
                 var requestMessage = _requestMessageFactory.Create(request);
 
-                try
-                {
-                    return _responseFactory.Create(
-                        request,
-                        client.SendAsync(requestMessage).Result);
-                }
-                catch (Exception ex)
-                {
-                    return _responseFactory.CreateExceptionResponse(request, ex);
-                }
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var response = GetResponse(request, client, requestMessage);
+
+                stopwatch.Stop();
+
+                response.Properties.Add(ExecutionTimeKey, stopwatch.ElapsedMilliseconds);
+
+                return response;
+            }
+        }
+
+        private IResponse GetResponse(IRequest request, IHttpClient client, System.Net.Http.HttpRequestMessage requestMessage)
+        {
+            try
+            {
+                return _responseFactory.Create(request, client.SendAsync(requestMessage).Result);
+            }
+            catch (Exception ex)
+            {
+                return _responseFactory.CreateExceptionResponse(request, ex);
             }
         }
     }

@@ -50,7 +50,7 @@ namespace StoryLine.Rest.Services.Http
                 Body = body,
                 Status = (int)result.StatusCode,
                 ReasonPhrase = result.ReasonPhrase,
-                Headers = headers
+                Headers = headers,
             };
         }
 
