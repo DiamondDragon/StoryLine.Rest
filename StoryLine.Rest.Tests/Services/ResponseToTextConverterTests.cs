@@ -43,7 +43,7 @@ namespace StoryLine.Rest.Tests.Services
         [Fact]
         public void GetText_When_Null_Response_Should_Throw_ArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => _underTest.GetText(null));
+            Assert.Throws<ArgumentNullException>(() => _underTest.GetText(null, false));
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace StoryLine.Rest.Tests.Services
         {
             A.CallTo(() => _response.Body).Returns(null);
 
-            _underTest.GetText(_response).Should().BeEmpty();
+            _underTest.GetText(_response, false).Should().BeEmpty();
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace StoryLine.Rest.Tests.Services
         {
             A.CallTo(() => _response.Body).Returns(new byte[0]);
 
-            _underTest.GetText(_response).Should().BeEmpty();
+            _underTest.GetText(_response, false).Should().BeEmpty();
         }
 
         [Theory]
@@ -69,7 +69,7 @@ namespace StoryLine.Rest.Tests.Services
         {
             A.CallTo(() => _contentTypeProvider.GetCharSet(_headers)).Returns(charSet);
 
-            _underTest.GetText(_response).Should().Be(ResponseBodyContent);
+            _underTest.GetText(_response, false).Should().Be(ResponseBodyContent);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace StoryLine.Rest.Tests.Services
             A.CallTo(() => _contentTypeProvider.GetCharSet(_headers)).Returns("utf-32");
             A.CallTo(() => _response.Body).Returns(Encoding.UTF32.GetBytes("Dragon123"));
 
-            _underTest.GetText(_response).Should().Be("Dragon123");
+            _underTest.GetText(_response, false).Should().Be("Dragon123");
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace StoryLine.Rest.Tests.Services
             Config.DefaultEncoding = Encoding.Unicode;
             A.CallTo(() => _response.Body).Returns(Encoding.ASCII.GetBytes("XXXXX"));
 
-            _underTest.GetText(_response).Should().NotBeEmpty();
+            _underTest.GetText(_response, false).Should().NotBeEmpty();
         }
     }
 }

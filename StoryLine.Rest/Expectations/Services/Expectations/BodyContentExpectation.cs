@@ -20,7 +20,7 @@ namespace StoryLine.Rest.Expectations.Services.Expectations
             if (response == null)
                 throw new ArgumentNullException(nameof(response));
 
-            var actualResponseText = Config.ResponseToTextConverter.GetText(response);
+            var actualResponseText = Config.ResponseToTextConverter.GetText(response, false);
 
             if (actualResponseText == null)
                 throw new ExpectationException("Response doesn't contain any text");

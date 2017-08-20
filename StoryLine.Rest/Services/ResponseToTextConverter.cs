@@ -14,10 +14,13 @@ namespace StoryLine.Rest.Services
             _contentTypeProvider = contentTypeProvider ?? throw new ArgumentNullException(nameof(contentTypeProvider));
         }
 
-        public string GetText(IResponse response)
+        public string GetText(IResponse response, bool failOnEmptyBody = true)
         {
             if (response == null)
                 throw new ArgumentNullException(nameof(response));
+
+            if (failOnEmptyBody)
+                ValidateRequest(response);
 
             if (response.Body == null)
                 return string.Empty;
@@ -38,6 +41,24 @@ namespace StoryLine.Rest.Services
             {
                 throw new ExpectationException("Failed to convert response into text.", ex);
             }
+        }
+
+        private static void ValidateRequest(IResponse response)
+        {
+            if (response.Body == null || response.Body.Length == 0)
+                throw new ExpectationException("Empty body can't be used to extract text. Request details: " + GetResponseDetails(response));
+        }
+
+        private static string GetResponseDetails(IResponse response)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append("Service=" + response.Request.Service + ", ");
+            builder.Append("Method=" + response.Request.Method + ", ");
+            builder.Append("Url=" + response.Request.Url + ", ");
+            builder.Append("Status=" + response.Status);
+
+            return builder.ToString();
         }
 
         private static Encoding GetEncoding(string charSetName)
