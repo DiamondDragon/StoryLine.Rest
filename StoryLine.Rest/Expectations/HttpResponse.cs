@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
 using StoryLine.Contracts;
-using StoryLine.Rest.Expectations.Builders;
 using StoryLine.Rest.Expectations.Services;
 using StoryLine.Rest.Expectations.Services.Expectations;
 

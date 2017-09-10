@@ -11,5 +11,7 @@ namespace StoryLine.Rest.Services.Http
         byte[] Body { get; }
         int Status { get; }
         string ReasonPhrase { get; }
+
+        IDictionary<string, object> Properties { get; }
     }
 }

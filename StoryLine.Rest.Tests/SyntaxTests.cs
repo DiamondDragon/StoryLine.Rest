@@ -1,8 +1,5 @@
 ﻿using StoryLine.Rest.Actions;
 using StoryLine.Rest.Actions.Extensions;
-using StoryLine.Rest.Expectations;
-using StoryLine.Rest.Expectations.Extensions;
-using Xunit;
 
 namespace StoryLine.Rest.Tests
 {

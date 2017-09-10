@@ -29,10 +29,8 @@ namespace StoryLine.Rest.Services
                 return string.Empty;
 
             var encoding = values[1].Split('=');
-            if (encoding.Length != 2)
-                return string.Empty;
 
-            return encoding[1].Trim();
+            return encoding.Length != 2 ? string.Empty : encoding[1].Trim();
         }
 
         private static string[] GetContentTypeValues(IEnumerable<KeyValuePair<string, string[]>> headers)

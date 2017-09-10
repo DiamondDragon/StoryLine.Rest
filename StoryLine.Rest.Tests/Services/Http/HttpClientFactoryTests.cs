@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using FakeItEasy;
 using FluentAssertions;
+using Newtonsoft.Json.Schema;
 using StoryLine.Rest.Services.Http;
 using Xunit;
 
@@ -47,14 +48,13 @@ namespace StoryLine.Rest.Tests.Services.Http
         }
 
         [Fact]
-        public void Create_When_Service_Name_Not_Specified_And_Signle_Endpoints_Exists_Should_Create_Default_HttpClient()
+        public void Create_When_Service_Name_Not_Specified_Should_Return_HttpClient_Without_Base_Address()
         {
             A.CallTo(() => _serviceRegistry.GetAll()).Returns(new List<IServiceConfig> { _config1 });
 
             var result = (HttpClient)_underTest.Create(null);
 
-            result.BaseAddress.ToString().Should().Be("http://google.com/");
-            result.Timeout.Should().Be(TimeSpan.FromSeconds(222));
+            result.BaseAddress.Should().BeNull();
         }
 
         [Fact]

@@ -40,7 +40,7 @@ namespace StoryLine.Rest.Services.Http
             {
                 Method = new HttpMethod(request.Method.ToUpper()),
                 RequestUri = new Uri(request.Url, UriKind.RelativeOrAbsolute),
-                Content = CreateContent(request),
+                Content = CreateContent(request)
             };
 
             foreach (var header in request.Headers)

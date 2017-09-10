@@ -83,7 +83,7 @@ namespace StoryLine.Rest.Services.Resources
                 var resources = assembly.GetManifestResourceNames();
 
                 return exactMatch ? 
-                    GetExactMatchResource(frame, assembly, resourceName, resources) : 
+                    GetExactMatchResource(assembly, resourceName, resources) : 
                     GetSimilarResource(frame, assembly, resourceName, resources);
             }
 
@@ -105,7 +105,7 @@ namespace StoryLine.Rest.Services.Resources
             return Stream.Null;
         }
 
-        private static Stream GetExactMatchResource(StackFrame frame, Assembly assembly, string resourceName, IEnumerable<string> resources)
+        private static Stream GetExactMatchResource(Assembly assembly, string resourceName, IEnumerable<string> resources)
         {
             return resources.Contains(resourceName) ? 
                 assembly.GetManifestResourceStream(resourceName) : 

@@ -17,10 +17,7 @@ namespace StoryLine.Rest.Expectations.Services
             if (!Service(response.Request.Service))
                 return false;
 
-            if (!Url(response.Request.Url))
-                return false;
-
-            return Method(response.Request.Method);
+            return Url(response.Request.Url) && Method(response.Request.Method);
         }
     }
 }
