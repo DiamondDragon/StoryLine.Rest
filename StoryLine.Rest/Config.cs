@@ -39,7 +39,7 @@ namespace StoryLine.Rest
             new ResponseFactory()
         );
         private static readonly ResponseAugmentingDecorator ResponseAugmentingDecorator = new ResponseAugmentingDecorator(RestClientInstance);
-        private static readonly ResponseRecordingDecorator ResponseRecordingDecorator = new ResponseRecordingDecorator(ResponseAugmentingDecorator, ResponseLogger, () => ResponseRecordingEnabled);
+        private static readonly ResponseRecordingDecorator ResponseRecordingDecorator = new ResponseRecordingDecorator(ResponseAugmentingDecorator, ResponseLogger);
 
         private static Func<JsonVerifierSettings, ITextVerifier> _jsonVerifierFactory = x => new JsonVerifier(x);
         private static Func<PlainTextVerifierSettings, ITextVerifier> _plainTextVerifierFactory = x => new PlainTextVerifier(x);
@@ -102,8 +102,6 @@ namespace StoryLine.Rest
         }
 
         internal static IRestClient RestClient => ResponseRecordingDecorator;
-
-        public static bool ResponseRecordingEnabled { get; set; } = false;
 
         public static void SetAssemblies(params Assembly[] assemblies)
         {
