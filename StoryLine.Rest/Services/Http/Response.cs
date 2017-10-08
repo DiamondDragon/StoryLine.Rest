@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace StoryLine.Rest.Services.Http
 {
@@ -9,6 +10,8 @@ namespace StoryLine.Rest.Services.Http
         private IReadOnlyDictionary<string, string[]> _headers = new Dictionary<string, string[]>();
 
         public IRequest Request { get; set; }
+
+        [JsonIgnore]
         public Exception Exception { get; set; }
 
         public IReadOnlyDictionary<string, string[]> Headers
