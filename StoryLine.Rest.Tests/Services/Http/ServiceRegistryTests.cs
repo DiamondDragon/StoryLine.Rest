@@ -41,7 +41,7 @@ namespace StoryLine.Rest.Tests.Services.Http
             _underTest.Add(config1);
             _underTest.Add(config2);
 
-            _underTest.GetAll().ShouldBeEquivalentTo(new[] { config1, config2 });
+            _underTest.GetAll().Should().BeEquivalentTo(new[] { config1, config2 });
         }
 
         [Theory]
@@ -55,7 +55,7 @@ namespace StoryLine.Rest.Tests.Services.Http
             _underTest.Add(config2);
             _underTest.Add(config1);
 
-            _underTest.Get(service2).ShouldBeEquivalentTo(config1);
+            _underTest.Get(service2).Should().BeEquivalentTo(config1);
         }
     }
 }

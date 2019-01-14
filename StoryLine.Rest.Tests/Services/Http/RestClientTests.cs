@@ -61,7 +61,7 @@ namespace StoryLine.Rest.Tests.Services.Http
         {
             _underTest.Send(_request).Should().BeSameAs(_response);
 
-            A.CallTo(() => _httpClient.Dispose()).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => _httpClient.Dispose()).MustHaveHappened(1, Times.Exactly);
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace StoryLine.Rest.Tests.Services.Http
 
             _underTest.Send(_request).Should().BeSameAs(_errorResponse);
 
-            A.CallTo(() => _httpClient.Dispose()).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => _httpClient.Dispose()).MustHaveHappened(1, Times.Exactly);
         }
     }
 }

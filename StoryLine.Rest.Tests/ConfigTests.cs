@@ -16,7 +16,7 @@ namespace StoryLine.Rest.Tests
         [Fact]
         public void DefaultJsonSerializerSettings_Should_Use_CamelCasePropertyNameContactResource_And_NullValueHandling_Equal_To_Ignore()
         {
-            Config.DefaultJsonSerializerSettings.ShouldBeEquivalentTo(new JsonSerializerSettings
+            Config.DefaultJsonSerializerSettings.Should().BeEquivalentTo(new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore

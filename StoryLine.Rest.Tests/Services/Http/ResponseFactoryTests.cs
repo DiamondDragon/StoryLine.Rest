@@ -35,7 +35,7 @@ namespace StoryLine.Rest.Tests.Services.Http
             var request = new Request { Method = "POST", Body = new byte[1] };
             var exception = new Exception("Test");
 
-            _underTest.CreateExceptionResponse(request, exception).ShouldBeEquivalentTo(new Response
+            _underTest.CreateExceptionResponse(request, exception).Should().BeEquivalentTo(new Response
             {
                 Exception =  exception,
                 Request = request
@@ -72,7 +72,7 @@ namespace StoryLine.Rest.Tests.Services.Http
             message.Headers.Add("custom-message-header", new[] { "value1"});
             message.Content.Headers.Add("custom-content-header", new[] { "value2"});
 
-            _underTest.Create(request, message).ShouldBeEquivalentTo(new Response
+            _underTest.Create(request, message).Should().BeEquivalentTo(new Response
             {
                 Request = request,
                 ReasonPhrase = "Reason1",
