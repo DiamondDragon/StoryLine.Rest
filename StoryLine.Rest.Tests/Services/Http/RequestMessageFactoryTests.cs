@@ -49,7 +49,7 @@ namespace StoryLine.Rest.Tests.Services.Http
         {
             _request.Method = method;
 
-            _underTest.Create(_request).Content.ReadAsByteArrayAsync().Result.ShouldBeEquivalentTo(new byte[] { 123 });
+            _underTest.Create(_request).Content.ReadAsByteArrayAsync().Result.Should().BeEquivalentTo(new byte[] { 123 });
         }
 
         [Fact]
