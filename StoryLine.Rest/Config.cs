@@ -59,25 +59,25 @@ namespace StoryLine.Rest
             "TheoryAttribute"
         };
 
-        internal static Func<JsonVerifierSettings, ITextVerifier> JsonVerifierFactory
+        public static Func<JsonVerifierSettings, ITextVerifier> JsonVerifierFactory
         {
             get => _jsonVerifierFactory;
             set => _jsonVerifierFactory = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        internal static Func<PlainTextVerifierSettings, ITextVerifier> PlainTextVerifierFactory
+        public static Func<PlainTextVerifierSettings, ITextVerifier> PlainTextVerifierFactory
         {
             get => _plainTextVerifierFactory;
             set => _plainTextVerifierFactory = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        internal static IResourceContentProvider ResourceContentProvider
+        public static IResourceContentProvider ResourceContentProvider
         {
             get => _resourceContentProvider;
             set => _resourceContentProvider = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        internal static IResponseToTextConverter ResponseToTextConverter
+        public static IResponseToTextConverter ResponseToTextConverter
         {
             get => _responseToTextConverter;
             set => _responseToTextConverter = value ?? throw new ArgumentNullException(nameof(value));
