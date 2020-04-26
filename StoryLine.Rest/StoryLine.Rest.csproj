@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <PackageLicense>https://github.com/DiamondDragon/StoryLine.Rest/blob/master/License.txt</PackageLicense>
     <Copyright>Andrei Salanoi &lt;diamond_dragon@tut.by&gt;</Copyright>
     <PackageProjectUrl>https://github.com/DiamondDragon/StoryLine.Rest</PackageProjectUrl>
